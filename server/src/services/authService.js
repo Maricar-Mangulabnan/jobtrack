@@ -47,4 +47,12 @@ async function login({ email, password }) {
   return { user, token: signToken(user) };
 }
 
-module.exports = { register, login };
+async function getUser(id) {
+  const { rows } = await pool.query(
+    "SELECT id, email, name, created_at FROM users WHERE id = $1",
+    [id],
+  );
+  return rows[0];
+}
+
+module.exports = { register, login, getUser };

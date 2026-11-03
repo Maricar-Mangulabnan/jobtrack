@@ -41,4 +41,14 @@ async function login(req, res, next) {
   }
 }
 
-module.exports = { register, login };
+async function me(req, res, next) {
+  try {
+    const user = await authService.getUser(req.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { register, login, me };
