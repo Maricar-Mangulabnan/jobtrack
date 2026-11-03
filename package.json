@@ -1,0 +1,13 @@
+{
+  "name": "jobtrack",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "server",
+    "packages/*"
+  ],
+  "scripts": {
+    "server": "npm run dev --workspace server",
+    "migrate": "npm run migrate --workspace server"
+  }
+}
