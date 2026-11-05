@@ -3,6 +3,7 @@ const cors = require("cors");
 const healthRoutes = require("./routes/health");
 const statusRoutes = require("./routes/statuses");
 const authRoutes = require("./routes/auth");
+const applicationRoutes = require("./routes/applications");
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use("/api", healthRoutes);
 app.use("/api", statusRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/applications", applicationRoutes);
 
 // 404 for anything else
 app.use((req, res) => {
