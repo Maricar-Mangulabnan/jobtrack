@@ -4,11 +4,19 @@ const service = require("../services/applicationService");
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const SETUPS = ["onsite", "hybrid", "remote"];
 
-function validate(body) {
-  if (typeof body.company !== "string" || !body.company.trim())
-    return "Company is required";
-  if (typeof body.position !== "string" || !body.position.trim())
-    return "Position is required";
+function notFound(res) {
+  return res.status(404).json({ error: "Application not found" });
+}
+
+// partial = true is for edits: only the fields that are sent get checked.
+function validate(body, { partial = false } = {}) {
+  for (const key of ["company", "position"]) {
+    const value = body[key];
+    if (partial && value === undefined) continue;
+    if (typeof value !== "string" || !value.trim()) {
+      return `${key === "company" ? "Company" : "Position"} is required`;
+    }
+  }
   if (body.work_setup != null && !SETUPS.includes(body.work_setup)) {
     return "work_setup must be onsite, hybrid or remote";
   }
@@ -30,16 +38,19 @@ function validate(body) {
   return null;
 }
 
+function trimNames(body) {
+  const data = { ...body };
+  if (typeof data.company === "string") data.company = data.company.trim();
+  if (typeof data.position === "string") data.position = data.position.trim();
+  return data;
+}
+
 async function create(req, res, next) {
   try {
     const error = validate(req.body);
     if (error) return res.status(400).json({ error });
 
-    const application = await service.create(req.userId, {
-      ...req.body,
-      company: req.body.company.trim(),
-      position: req.body.position.trim(),
-    });
+    const application = await service.create(req.userId, trimNames(req.body));
     res.status(201).json({ application });
   } catch (err) {
     next(err);
@@ -64,16 +75,70 @@ async function list(req, res, next) {
 async function getOne(req, res, next) {
   try {
     const { id } = req.params;
-    if (!UUID.test(id))
-      return res.status(404).json({ error: "Application not found" });
+    if (!UUID.test(id)) return notFound(res);
 
     const application = await service.getById(req.userId, id);
-    if (!application)
-      return res.status(404).json({ error: "Application not found" });
+    if (!application) return notFound(res);
     res.json({ application });
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = { create, list, getOne };
+async function update(req, res, next) {
+  try {
+    const { id } = req.params;
+    if (!UUID.test(id)) return notFound(res);
+
+    if (!service.EDITABLE.some((f) => req.body[f] !== undefined)) {
+      return res.status(400).json({ error: "Nothing to update" });
+    }
+    const error = validate(req.body, { partial: true });
+    if (error) return res.status(400).json({ error });
+
+    const application = await service.update(
+      req.userId,
+      id,
+      trimNames(req.body),
+    );
+    if (!application) return notFound(res);
+    res.json({ application });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function changeStatus(req, res, next) {
+  try {
+    const { id } = req.params;
+    if (!UUID.test(id)) return notFound(res);
+
+    const { status } = req.body;
+    if (!STATUSES.includes(status)) {
+      return res
+        .status(400)
+        .json({ error: `status must be one of: ${STATUSES.join(", ")}` });
+    }
+
+    const application = await service.changeStatus(req.userId, id, status);
+    if (!application) return notFound(res);
+    res.json({ application });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function remove(req, res, next) {
+  try {
+    const { id } = req.params;
+    if (!UUID.test(id)) return notFound(res);
+
+    const deleted = await service.remove(req.userId, id);
+    if (!deleted) return notFound(res);
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { create, list, getOne, update, changeStatus, remove };

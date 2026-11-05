@@ -1,4 +1,25 @@
 const pool = require("../db/pool");
+const { canMove } = require("@jobtrack/shared");
+
+// Only these columns can be changed through the edit endpoint.
+// Status is NOT here: it changes through changeStatus() so the rules are enforced.
+const EDITABLE = [
+  "company",
+  "position",
+  "job_url",
+  "location",
+  "work_setup",
+  "salary_min",
+  "salary_max",
+  "currency",
+  "description",
+];
+
+function httpError(status, message) {
+  const err = new Error(message);
+  err.status = status;
+  return err;
+}
 
 async function create(userId, data) {
   // One statement: insert the application AND its first status_history row.
@@ -57,4 +78,89 @@ async function getById(userId, id) {
   return rows[0];
 }
 
-module.exports = { create, list, getById };
+async function update(userId, id, data) {
+  // Column names come from our own EDITABLE list, never from the request,
+  // so building the SQL text this way is safe. Values still use $ placeholders.
+  const fields = EDITABLE.filter((f) => data[f] !== undefined);
+  const sets = fields.map((f, i) => `${f} = $${i + 3}`);
+  const values = fields.map((f) =>
+    f === "currency" && data[f] ? data[f].toUpperCase() : data[f],
+  );
+
+  try {
+    const { rows } = await pool.query(
+      `UPDATE applications SET ${sets.join(", ")}
+       WHERE id = $1 AND user_id = $2
+       RETURNING *`,
+      [id, userId, ...values],
+    );
+    return rows[0];
+  } catch (err) {
+    if (err.code === "23514") throw httpError(400, "Salary range is invalid");
+    throw err;
+  }
+}
+
+async function changeStatus(userId, id, nextStatus) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    // FOR UPDATE locks the row so two requests can't change it at the same time
+    const { rows } = await client.query(
+      "SELECT status FROM applications WHERE id = $1 AND user_id = $2 FOR UPDATE",
+      [id, userId],
+    );
+    if (!rows[0]) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const current = rows[0].status;
+    if (!canMove(current, nextStatus)) {
+      throw httpError(409, `Cannot move from ${current} to ${nextStatus}`);
+    }
+
+    const { rows: updated } = await client.query(
+      `UPDATE applications
+          SET status = $3::application_status,
+              applied_on = CASE
+                WHEN $3::application_status = 'Applied' AND applied_on IS NULL
+                THEN CURRENT_DATE ELSE applied_on END
+        WHERE id = $1 AND user_id = $2
+        RETURNING *`,
+      [id, userId, nextStatus],
+    );
+
+    await client.query(
+      "INSERT INTO status_history (application_id, from_status, to_status) VALUES ($1, $2, $3)",
+      [id, current, nextStatus],
+    );
+
+    await client.query("COMMIT");
+    return updated[0];
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+async function remove(userId, id) {
+  const { rowCount } = await pool.query(
+    "DELETE FROM applications WHERE id = $1 AND user_id = $2",
+    [id, userId],
+  );
+  return rowCount > 0;
+}
+
+module.exports = {
+  EDITABLE,
+  create,
+  list,
+  getById,
+  update,
+  changeStatus,
+  remove,
+};
