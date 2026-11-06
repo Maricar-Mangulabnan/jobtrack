@@ -5,6 +5,7 @@ const statusRoutes = require("./routes/statuses");
 const authRoutes = require("./routes/auth");
 const applicationRoutes = require("./routes/applications");
 const noteRoutes = require("./routes/notes");
+const reminderRoutes = require("./routes/reminders");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use("/api", statusRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api", noteRoutes);
+app.use("/api", reminderRoutes);
 
 // 404 for anything else
 app.use((req, res) => {
