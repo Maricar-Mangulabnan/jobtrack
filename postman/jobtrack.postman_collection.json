@@ -1,0 +1,323 @@
+{
+  "info": {
+    "_postman_id": "078c6a67-2d03-4d01-a491-0a8b6daf7d72",
+    "name": "jobtrack",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "37912098"
+  },
+  "item": [
+    {
+      "name": "token",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4000/api/auth/me",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "auth",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:4000/api/applications",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4000/api/applications",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "applications"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:4000/api/applications/3476b45c-385e-4687-9fca-7e98ab668daa/status",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"status\": \"Interview\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:4000/api/applications/8118f306-53bd-4535-a5d4-a75a702a3350/status",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "applications",
+            "8118f306-53bd-4535-a5d4-a75a702a3350",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:4000/api/applications/3476b45c-385e-4687-9fca-7e98ab668daa",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_0scx}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"company\": \"Acme Corp\",\r\n  \"position\": \"Junior Web Developer\",\r\n  \"job_url\": \"https://example.com/jobs/123\",\r\n  \"work_setup\": \"remote\",\r\n  \"salary_min\": 30000,\r\n  \"salary_max\": 40000,\r\n  \"currency\": \"php\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:4000/api/applications/8118f306-53bd-4535-a5d4-a75a702a3350",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "applications",
+            "8118f306-53bd-4535-a5d4-a75a702a3350"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:4000/api/reminders/f075a579-e192-4f10-84bb-7effedba6a88",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"done\": true }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:4000/api/reminders/f075a579-e192-4f10-84bb-7effedba6a88",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "reminders",
+            "f075a579-e192-4f10-84bb-7effedba6a88"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "   {\r\n     \"email\": \"test@example.com\",\r\n     \"password\": \"password123\",\r\n     \"name\": \"Test User\"\r\n   }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:4000/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:4000/apiapplications/not-a-uuid",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "   { \"kind\": \"party\", \r\n   \"title\": \"Follow up with Ana\", \"due_at\": \"tomorrow\"\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:4000/apiapplications/not-a-uuid",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "apiapplications",
+            "not-a-uuid"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:4000/api/dashboard/summary",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"kind\": \"interview\", \"title\": \"Interview with Ana\", \"due_at\": \"2026-11-20T14:00:00+08:00\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:4000/api/dashboard/summary",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "dashboard",
+            "summary"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_109f",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0086",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_04lz",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0scx",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_1982",
+      "secret": true
+    }
+  ]
+}

@@ -1,7 +1,6 @@
 const { STATUSES } = require("@jobtrack/shared");
 const service = require("../services/applicationService");
-
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const { UUID } = require("../utils/validation");
 const SETUPS = ["onsite", "hybrid", "remote"];
 
 function notFound(res) {

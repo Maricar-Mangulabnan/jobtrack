@@ -1,6 +1,5 @@
 const service = require("../services/noteService");
-
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const { UUID } = require("../utils/validation");
 const MAX_LENGTH = 5000;
 
 function notFound(res, what) {
