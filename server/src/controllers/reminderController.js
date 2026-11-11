@@ -60,7 +60,17 @@ async function create(req, res, next) {
 async function list(req, res, next) {
   try {
     const upcoming = req.query.upcoming === "true";
-    const reminders = await service.list(req.userId, { upcoming });
+    const applicationId = req.query.application_id;
+    if (applicationId && !UUID.test(applicationId)) {
+      return res
+        .status(400)
+        .json({ error: "application_id must be a valid id" });
+    }
+
+    const reminders = await service.list(req.userId, {
+      upcoming,
+      applicationId,
+    });
     res.json({ reminders });
   } catch (err) {
     next(err);

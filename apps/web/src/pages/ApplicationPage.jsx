@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import StatusBadge from "../components/StatusBadge";
 import Notes from "../components/Notes";
+import Reminders from "../components/Reminders";
 
 const dateOnly = (value) =>
   new Date(value).toLocaleDateString("en-PH", { dateStyle: "medium" });
@@ -94,6 +95,7 @@ export default function ApplicationPage({ onLogout }) {
               )}
             </section>
 
+            <Reminders applicationId={application.id} />
             <Notes applicationId={application.id} />
           </>
         )}

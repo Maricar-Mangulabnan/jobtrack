@@ -23,17 +23,21 @@ async function create(userId, applicationId, data) {
   return rows[0];
 }
 
-async function list(userId, { upcoming }) {
-  // JOIN gives each reminder its application's company and position,
-  // and lets us keep only reminders that belong to this user.
+async function list(userId, { upcoming, applicationId }) {
+  const params = [userId];
   let sql = `SELECT r.*, a.company, a.position
              FROM reminders r
              JOIN applications a ON a.id = r.application_id
              WHERE a.user_id = $1`;
+
+  if (applicationId) {
+    params.push(applicationId);
+    sql += ` AND r.application_id = $${params.length}`;
+  }
   if (upcoming) sql += " AND r.done = false";
   sql += " ORDER BY r.due_at ASC";
 
-  const { rows } = await pool.query(sql, [userId]);
+  const { rows } = await pool.query(sql, params);
   return rows;
 }
 
