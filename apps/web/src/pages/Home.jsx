@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import { api } from "../api";
 import StatusBadge from "../components/StatusBadge";
 import AddApplicationForm from "../components/AddApplicationForm";
+import ApplicationsTable from "../components/ApplicationsTable";
 
 const dateTime = (value) =>
   new Date(value).toLocaleString("en-PH", {
     dateStyle: "medium",
     timeStyle: "short",
   });
-const dateOnly = (value) =>
-  new Date(value).toLocaleDateString("en-PH", { dateStyle: "medium" });
 
 export default function Home({ user, onLogout }) {
   const [summary, setSummary] = useState(null);
@@ -151,44 +150,7 @@ export default function Home({ user, onLogout }) {
               />
             )}
 
-            {applications.length === 0 ? (
-              <p className="text-sm text-slate-500">No applications yet.</p>
-            ) : (
-              <div className="overflow-x-auto rounded-lg bg-white ring-1 ring-slate-200">
-                <table className="w-full text-left text-sm">
-                  <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
-                    <tr>
-                      <th scope="col" className="px-4 py-2">
-                        Company
-                      </th>
-                      <th scope="col" className="px-4 py-2">
-                        Position
-                      </th>
-                      <th scope="col" className="px-4 py-2">
-                        Status
-                      </th>
-                      <th scope="col" className="px-4 py-2">
-                        Added
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200">
-                    {applications.map((app) => (
-                      <tr key={app.id}>
-                        <td className="px-4 py-3 font-medium">{app.company}</td>
-                        <td className="px-4 py-3">{app.position}</td>
-                        <td className="px-4 py-3">
-                          <StatusBadge status={app.status} />
-                        </td>
-                        <td className="px-4 py-3 text-slate-600">
-                          {dateOnly(app.created_at)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <ApplicationsTable applications={applications} onChanged={load} />
           </section>
         )}
       </main>

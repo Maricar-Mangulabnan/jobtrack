@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { api, clearToken, getToken, setToken } from "./api";
 import Home from "./pages/Home";
+import { Navigate, Route, Routes } from "react-router-dom";
+import ApplicationPage from "./pages/ApplicationPage";
 
 function LoginForm({ onLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -103,7 +105,18 @@ export default function App() {
     );
   }
 
-  if (user) return <Home user={user} onLogout={logout} />;
+  if (user) {
+    return (
+      <Routes>
+        <Route path="/" element={<Home user={user} onLogout={logout} />} />
+        <Route
+          path="/applications/:id"
+          element={<ApplicationPage onLogout={logout} />}
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    );
+  }
 
   return (
     <main className="grid min-h-screen place-items-center bg-slate-50 p-4 text-slate-900">
