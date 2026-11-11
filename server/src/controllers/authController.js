@@ -9,10 +9,10 @@ async function register(req, res, next) {
     const { email, password, name } = req.body;
     if (!isEmail(email))
       return res.status(400).json({ error: "A valid email is required" });
-    if (typeof password !== "string" || password.length < 8) {
+    if (typeof password !== "string" || password.length < 10) {
       return res
         .status(400)
-        .json({ error: "Password must be at least 8 characters" });
+        .json({ error: "Password must be at least 10 characters" });
     }
     if (typeof name !== "string" || !name.trim()) {
       return res.status(400).json({ error: "Name is required" });
