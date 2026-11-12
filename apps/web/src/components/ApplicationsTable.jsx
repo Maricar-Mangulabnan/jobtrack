@@ -6,7 +6,11 @@ import StatusBadge from "./StatusBadge";
 const dateOnly = (value) =>
   new Date(value).toLocaleDateString("en-PH", { dateStyle: "medium" });
 
-export default function ApplicationsTable({ applications, onChanged }) {
+export default function ApplicationsTable({
+  applications,
+  filtered,
+  onChanged,
+}) {
   const [transitions, setTransitions] = useState({});
   const [confirmId, setConfirmId] = useState(null); // row waiting for delete confirmation
   const [busyId, setBusyId] = useState(null); // row with a request in progress
@@ -42,7 +46,13 @@ export default function ApplicationsTable({ applications, onChanged }) {
     run(id, () => api(`/applications/${id}`, { method: "DELETE" }));
 
   if (applications.length === 0) {
-    return <p className="text-sm text-slate-500">No applications yet.</p>;
+    return (
+      <p className="text-sm text-slate-500">
+        {filtered
+          ? "No applications match your filters."
+          : "No applications yet."}
+      </p>
+    );
   }
 
   return (

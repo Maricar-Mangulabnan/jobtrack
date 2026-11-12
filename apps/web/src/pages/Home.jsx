@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import StatusBadge from "../components/StatusBadge";
 import AddApplicationForm from "../components/AddApplicationForm";
 import ApplicationsTable from "../components/ApplicationsTable";
+import Filters from "../components/Filters";
 
 const dateTime = (value) =>
   new Date(value).toLocaleString("en-PH", {
@@ -13,32 +14,65 @@ const dateTime = (value) =>
 export default function Home({ user, onLogout }) {
   const [summary, setSummary] = useState(null);
   const [applications, setApplications] = useState([]);
+  const [filters, setFilters] = useState({ q: "", status: "" });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // only the very first load
   const [showForm, setShowForm] = useState(false);
+  const latestRequest = useRef(0);
 
-  // Loads the dashboard numbers and the table. Called on open and after every change.
-  async function load() {
+  function handleError(err) {
+    if (err.status === 401)
+      onLogout(); // token expired
+    else setError(err.message);
+  }
+
+  async function loadSummary() {
     try {
-      const [summaryData, appData] = await Promise.all([
-        api("/dashboard/summary"),
-        api("/applications"),
-      ]);
-      setSummary(summaryData);
-      setApplications(appData.applications);
+      setSummary(await api("/dashboard/summary"));
     } catch (err) {
-      if (err.status === 401)
-        onLogout(); // token expired
-      else setError(err.message);
+      handleError(err);
+    }
+  }
+
+  async function loadApplications() {
+    const requestId = ++latestRequest.current;
+    const params = new URLSearchParams();
+    if (filters.q) params.set("q", filters.q);
+    if (filters.status) params.set("status", filters.status);
+    const query = params.toString();
+
+    try {
+      const data = await api(`/applications${query ? `?${query}` : ""}`);
+      // A newer search may have started while this one was loading. Ignore old answers.
+      if (requestId === latestRequest.current) {
+        setApplications(data.applications);
+        setError("");
+      }
+    } catch (err) {
+      handleError(err);
     } finally {
       setLoading(false);
     }
   }
 
+  // After add, status change or delete: refresh the numbers and the table.
+  const load = () => Promise.all([loadSummary(), loadApplications()]);
+
   useEffect(() => {
-    load();
+    loadSummary();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    loadApplications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
+
+  const toggleStatus = (status) =>
+    setFilters((current) => ({
+      ...current,
+      status: current.status === status ? "" : status,
+    }));
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -78,15 +112,23 @@ export default function Home({ user, onLogout }) {
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
                 {Object.entries(summary.counts).map(([status, count]) => (
-                  <div
+                  <button
                     key={status}
-                    className="rounded-lg bg-white p-3 ring-1 ring-slate-200"
+                    onClick={() => toggleStatus(status)}
+                    aria-pressed={filters.status === status}
+                    className={`rounded-lg bg-white p-3 text-left ring-1 hover:ring-emerald-400 ${
+                      filters.status === status
+                        ? "ring-2 ring-emerald-600"
+                        : "ring-slate-200"
+                    }`}
                   >
-                    <p className="text-2xl font-bold tabular-nums">{count}</p>
-                    <div className="mt-1">
+                    <span className="block text-2xl font-bold tabular-nums">
+                      {count}
+                    </span>
+                    <span className="mt-1 block">
                       <StatusBadge status={status} />
-                    </div>
-                  </div>
+                    </span>
+                  </button>
                 ))}
               </div>
             </section>
@@ -150,7 +192,19 @@ export default function Home({ user, onLogout }) {
               />
             )}
 
-            <ApplicationsTable applications={applications} onChanged={load} />
+            <Filters
+              statuses={summary ? Object.keys(summary.counts) : []}
+              value={filters}
+              onChange={(patch) =>
+                setFilters((current) => ({ ...current, ...patch }))
+              }
+            />
+
+            <ApplicationsTable
+              applications={applications}
+              filtered={Boolean(filters.q || filters.status)}
+              onChanged={load}
+            />
           </section>
         )}
       </main>
