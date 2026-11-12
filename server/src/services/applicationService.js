@@ -155,6 +155,20 @@ async function remove(userId, id) {
   return rowCount > 0;
 }
 
+// Oldest first, so it reads like a timeline. Empty means the application
+// doesn't exist or isn't yours (every real application has a first row).
+async function history(userId, id) {
+  const { rows } = await pool.query(
+    `SELECT h.id, h.from_status, h.to_status, h.changed_at
+     FROM status_history h
+     JOIN applications a ON a.id = h.application_id
+     WHERE h.application_id = $1 AND a.user_id = $2
+     ORDER BY h.changed_at ASC, h.id ASC`,
+    [id, userId],
+  );
+  return rows.length > 0 ? rows : null;
+}
+
 module.exports = {
   EDITABLE,
   create,
@@ -163,4 +177,5 @@ module.exports = {
   update,
   changeStatus,
   remove,
+  history,
 };

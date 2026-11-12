@@ -140,4 +140,25 @@ async function remove(req, res, next) {
   }
 }
 
-module.exports = { create, list, getOne, update, changeStatus, remove };
+async function history(req, res, next) {
+  try {
+    const { id } = req.params;
+    if (!UUID.test(id)) return notFound(res);
+
+    const rows = await service.history(req.userId, id);
+    if (!rows) return notFound(res);
+    res.json({ history: rows });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {
+  create,
+  list,
+  getOne,
+  update,
+  changeStatus,
+  remove,
+  history,
+};

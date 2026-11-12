@@ -5,6 +5,7 @@ import StatusBadge from "../components/StatusBadge";
 import ApplicationForm from "../components/ApplicationForm";
 import Reminders from "../components/Reminders";
 import Notes from "../components/Notes";
+import StatusHistory from "../components/StatusHistory";
 
 const dateOnly = (value) =>
   new Date(value).toLocaleDateString("en-PH", { dateStyle: "medium" });
@@ -147,7 +148,10 @@ export default function ApplicationPage({ onLogout }) {
                 </>
               )}
             </section>
-
+            <StatusHistory
+              key={application.status}
+              applicationId={application.id}
+            />
             <Reminders applicationId={application.id} />
             <Notes applicationId={application.id} />
           </>
