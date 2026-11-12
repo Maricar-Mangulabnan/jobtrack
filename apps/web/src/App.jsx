@@ -5,6 +5,7 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import ApplicationPage from "./pages/ApplicationPage";
 import Register from "./pages/Register";
 import Board from "./pages/Board";
+import Layout from "./components/Layout";
 
 function LoginForm({ onLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -116,13 +117,15 @@ export default function App() {
   if (user) {
     return (
       <Routes>
-        <Route path="/" element={<Home user={user} onLogout={logout} />} />
-        <Route
-          path="/applications/:id"
-          element={<ApplicationPage onLogout={logout} />}
-        />
-        <Route path="/board" element={<Board onLogout={logout} />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route element={<Layout user={user} onLogout={logout} />}>
+          <Route path="/" element={<Home onLogout={logout} />} />
+          <Route
+            path="/applications/:id"
+            element={<ApplicationPage onLogout={logout} />}
+          />
+          <Route path="/board" element={<Board onLogout={logout} />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
       </Routes>
     );
   }
