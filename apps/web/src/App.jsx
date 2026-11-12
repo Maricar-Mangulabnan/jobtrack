@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 import ApplicationPage from "./pages/ApplicationPage";
 import Register from "./pages/Register";
+import Board from "./pages/Board";
 
 function LoginForm({ onLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -120,6 +121,7 @@ export default function App() {
           path="/applications/:id"
           element={<ApplicationPage onLogout={logout} />}
         />
+        <Route path="/board" element={<Board onLogout={logout} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );

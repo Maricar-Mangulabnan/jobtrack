@@ -4,7 +4,7 @@ import StatusBadge from "../components/StatusBadge";
 import AddApplicationForm from "../components/AddApplicationForm";
 import ApplicationsTable from "../components/ApplicationsTable";
 import Filters from "../components/Filters";
-
+import { Link } from "react-router-dom";
 const dateTime = (value) =>
   new Date(value).toLocaleString("en-PH", {
     dateStyle: "medium",
@@ -81,6 +81,12 @@ export default function Home({ user, onLogout }) {
           <h1 className="text-xl font-bold text-emerald-700">JobTrack</h1>
           <div className="flex items-center gap-3 text-sm">
             <span className="text-slate-600">{user.name}</span>
+            <Link
+              to="/board"
+              className="rounded-md border border-slate-300 px-3 py-1.5 text-sm hover:bg-slate-100"
+            >
+              Board view
+            </Link>
             <button
               onClick={onLogout}
               className="rounded-md border border-slate-300 px-3 py-1.5 hover:bg-slate-100"
