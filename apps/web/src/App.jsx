@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { api, clearToken, getToken, setToken } from "./api";
 import Home from "./pages/Home";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
 import ApplicationPage from "./pages/ApplicationPage";
+import Register from "./pages/Register";
 
 function LoginForm({ onLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -75,6 +76,12 @@ function LoginForm({ onLoggedIn }) {
       >
         {loading ? "Logging in..." : "Log in"}
       </button>
+      <p className="text-sm text-slate-600">
+        No account yet?{" "}
+        <Link to="/register" className="text-emerald-700 hover:underline">
+          Register
+        </Link>
+      </p>
     </form>
   );
 }
@@ -120,7 +127,10 @@ export default function App() {
 
   return (
     <main className="grid min-h-screen place-items-center bg-slate-50 p-4 text-slate-900">
-      <LoginForm onLoggedIn={setUser} />
+      <Routes>
+        <Route path="/register" element={<Register onLoggedIn={setUser} />} />
+        <Route path="*" element={<LoginForm onLoggedIn={setUser} />} />
+      </Routes>
     </main>
   );
 }
