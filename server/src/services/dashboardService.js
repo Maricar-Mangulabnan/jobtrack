@@ -1,5 +1,6 @@
 const pool = require("../db/pool");
 const { STATUSES } = require("@jobtrack/shared");
+const { CLOSED } = require("../utils/statusRules");
 
 async function summary(userId) {
   // Three independent queries, so run them at the same time.
@@ -15,17 +16,21 @@ async function summary(userId) {
       `SELECT r.*, a.company, a.position
        FROM reminders r
        JOIN applications a ON a.id = r.application_id
-       WHERE a.user_id = $1 AND r.done = false AND r.due_at >= now()
+       WHERE a.user_id = $1
+         AND a.status::text <> ALL($2)
+         AND r.done = false AND r.due_at >= now()
        ORDER BY r.due_at ASC
        LIMIT 5`,
-      [userId],
+      [userId, CLOSED],
     ),
     pool.query(
       `SELECT count(*)::int AS n
        FROM reminders r
        JOIN applications a ON a.id = r.application_id
-       WHERE a.user_id = $1 AND r.done = false AND r.due_at < now()`,
-      [userId],
+       WHERE a.user_id = $1
+         AND a.status::text <> ALL($2)
+         AND r.done = false AND r.due_at < now()`,
+      [userId, CLOSED],
     ),
   ]);
 

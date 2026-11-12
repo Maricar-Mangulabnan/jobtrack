@@ -1,4 +1,5 @@
 const pool = require("../db/pool");
+const { CLOSED } = require("../utils/statusRules");
 
 const EDITABLE = ["kind", "title", "due_at", "done"];
 
@@ -34,7 +35,10 @@ async function list(userId, { upcoming, applicationId }) {
     params.push(applicationId);
     sql += ` AND r.application_id = $${params.length}`;
   }
-  if (upcoming) sql += " AND r.done = false";
+  if (upcoming) {
+    params.push(CLOSED);
+    sql += ` AND r.done = false AND a.status::text <> ALL($${params.length})`;
+  }
   sql += " ORDER BY r.due_at ASC";
 
   const { rows } = await pool.query(sql, params);
