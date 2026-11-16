@@ -1,1 +1,55 @@
 @import "tailwindcss";
+
+/* Every colour, font and shadow of the app lives here. Tailwind turns each
+   --color-xxx into bg-xxx, text-xxx, border-xxx and so on. */
+@theme {
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #eef8fb; /* page background */
+  --color-card: #ffffff; /* panels, inputs */
+  --color-ink: #1b365d; /* text, borders, shadows */
+  --color-ink-soft: #4f6482; /* secondary text */
+  --color-line: #cfe3ee; /* quiet dividers */
+  --color-primary: #005a9c; /* main buttons and links */
+  --color-sky: #60c1e5; /* highlights */
+  --color-mist: #a0e0ef; /* big soft fills */
+  --color-pop: #ff6b4a; /* logo dot and focus ring only */
+
+  /* Hard shadows: no blur, just an offset copy of the shape. */
+  --shadow-pop-sm: 2px 2px 0 0 #1b365d;
+  --shadow-pop: 3px 3px 0 0 #1b365d;
+  --shadow-pop-lg: 5px 5px 0 0 #1b365d;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-paper);
+    background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: var(--color-ink);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-pop);
+    outline-offset: 2px;
+  }
+}
+
+/* Styles we reuse everywhere. Change them here, the whole app follows. */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink bg-card px-4 py-1.5 text-sm font-semibold text-ink shadow-pop transition-all hover:-translate-y-0.5 hover:shadow-pop-lg active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-primary text-white;
+  }
+  .card {
+    @apply rounded-2xl border-2 border-ink bg-card shadow-pop;
+  }
+}

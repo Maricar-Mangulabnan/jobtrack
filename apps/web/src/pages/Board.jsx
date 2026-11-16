@@ -97,6 +97,11 @@ export default function Board({ onLogout }) {
                 </h2>
 
                 <div className="min-h-16 space-y-2">
+                  {cards.length === 0 && (
+                    <p className="px-1 py-3 text-xs text-slate-400">
+                      No applications
+                    </p>
+                  )}
                   {cards.map((app) => (
                     <article
                       key={app.id}

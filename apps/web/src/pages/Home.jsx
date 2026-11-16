@@ -74,39 +74,40 @@ export default function Home({ onLogout }) {
     }));
 
   return (
-    <main className="mx-auto max-w-5xl space-y-8 px-4 py-6">
+    <main className="mx-auto max-w-6xl space-y-10 px-4 py-8">
       {error && (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p>
+        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+          {error}
+        </p>
       )}
-      {loading && <p className="text-slate-500">Loading...</p>}
+      {loading && <p className="text-ink-soft">Loading...</p>}
 
       {summary && (
         <>
           <section aria-labelledby="overview">
-            <div className="mb-3 flex items-baseline justify-between">
-              <h2 id="overview" className="text-lg font-semibold">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 id="overview" className="text-2xl font-extrabold">
                 Overview
               </h2>
-              <p className="text-sm text-slate-600">
-                {summary.total} applications
+              <p className="rounded-full border-2 border-ink bg-mist px-3 py-0.5 text-sm font-semibold">
+                {summary.total}{" "}
+                {summary.total === 1 ? "application" : "applications"}
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
               {Object.entries(summary.counts).map(([status, count]) => (
                 <button
                   key={status}
                   onClick={() => toggleStatus(status)}
                   aria-pressed={filters.status === status}
-                  className={`rounded-lg bg-white p-3 text-left ring-1 hover:ring-emerald-400 ${
-                    filters.status === status
-                      ? "ring-2 ring-emerald-600"
-                      : "ring-slate-200"
+                  className={`card p-3 text-left transition-all hover:-translate-y-0.5 hover:shadow-pop-lg ${
+                    filters.status === status ? "bg-mist" : ""
                   }`}
                 >
-                  <span className="block text-2xl font-bold tabular-nums">
+                  <span className="block font-display text-4xl font-extrabold tabular-nums">
                     {count}
                   </span>
-                  <span className="mt-1 block">
+                  <span className="mt-2 block">
                     <StatusBadge status={status} />
                   </span>
                 </button>
@@ -115,31 +116,31 @@ export default function Home({ onLogout }) {
           </section>
 
           <section aria-labelledby="upcoming">
-            <h2 id="upcoming" className="mb-3 text-lg font-semibold">
+            <h2 id="upcoming" className="mb-4 text-2xl font-extrabold">
               Upcoming
             </h2>
             {summary.overdue_count > 0 && (
-              <p className="mb-3 rounded-md bg-red-50 p-3 text-sm text-red-700">
+              <p className="mb-4 rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
                 {summary.overdue_count} overdue reminder
                 {summary.overdue_count > 1 ? "s" : ""}
               </p>
             )}
             {summary.upcoming.length === 0 ? (
-              <p className="text-sm text-slate-500">Nothing coming up.</p>
+              <p className="text-sm text-ink-soft">Nothing coming up.</p>
             ) : (
-              <ul className="divide-y divide-slate-200 rounded-lg bg-white ring-1 ring-slate-200">
+              <ul className="card divide-y-2 divide-line overflow-hidden">
                 {summary.upcoming.map((r) => (
                   <li
                     key={r.id}
                     className="flex flex-wrap items-center justify-between gap-2 px-4 py-3"
                   >
                     <div>
-                      <p className="font-medium">{r.title}</p>
-                      <p className="text-sm text-slate-600">
+                      <p className="font-semibold">{r.title}</p>
+                      <p className="text-sm text-ink-soft">
                         {r.company} · {r.position}
                       </p>
                     </div>
-                    <p className="text-sm text-slate-600">
+                    <p className="rounded-full bg-mist px-3 py-1 text-sm font-semibold">
                       {dateTime(r.due_at)}
                     </p>
                   </li>
@@ -152,13 +153,13 @@ export default function Home({ onLogout }) {
 
       {!loading && (
         <section aria-labelledby="applications">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 id="applications" className="text-lg font-semibold">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 id="applications" className="text-2xl font-extrabold">
               Applications
             </h2>
             <button
               onClick={() => setShowForm((open) => !open)}
-              className="rounded-md bg-emerald-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-800"
+              className="btn btn-primary"
             >
               {showForm ? "Cancel" : "Add application"}
             </button>
