@@ -131,7 +131,11 @@ export default function ApplicationPage({ onLogout }) {
                         <dt className="text-xs font-bold uppercase tracking-wide text-ink-soft">
                           {label}
                         </dt>
-                        <dd className="font-medium">{value}</dd>
+                        <dd
+                          className={`font-medium ${label === "Work setup" ? "capitalize" : ""}`}
+                        >
+                          {value}
+                        </dd>
                       </div>
                     ))}
                   </dl>

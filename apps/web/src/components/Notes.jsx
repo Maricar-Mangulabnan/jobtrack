@@ -59,12 +59,12 @@ export default function Notes({ applicationId }) {
   }
 
   return (
-    <section aria-labelledby="notes" className="space-y-3">
-      <h2 id="notes" className="text-lg font-semibold">
+    <section aria-labelledby="notes" className="space-y-4">
+      <h2 id="notes" className="text-2xl font-extrabold">
         Notes
       </h2>
 
-      <form onSubmit={addNote} className="space-y-2">
+      <form onSubmit={addNote} className="space-y-3">
         <label htmlFor="note" className="sr-only">
           New note
         </label>
@@ -76,39 +76,43 @@ export default function Notes({ applicationId }) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Recruiter name, interview questions, impressions..."
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600"
+          className="field w-full"
         />
         <button
           type="submit"
           disabled={saving || !text.trim()}
-          className="rounded-md bg-emerald-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+          className="btn btn-primary"
         >
           {saving ? "Saving..." : "Add note"}
         </button>
       </form>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+          {error}
+        </p>
+      )}
 
       {notes.length === 0 ? (
-        <p className="text-sm text-slate-500">No notes yet.</p>
+        <p className="text-sm text-ink-soft">No notes yet.</p>
       ) : (
-        <ul className="divide-y divide-slate-200 rounded-lg bg-white ring-1 ring-slate-200">
+        <ul className="card divide-y-2 divide-line overflow-hidden">
           {notes.map((note) => (
-            <li key={note.id} className="space-y-1 px-4 py-3">
+            <li key={note.id} className="space-y-2 px-4 py-3">
               <p className="whitespace-pre-wrap text-sm">{note.body}</p>
-              <div className="flex items-center justify-between text-xs text-slate-500">
+              <div className="flex items-center justify-between text-xs text-ink-soft">
                 <span>{when(note.created_at)}</span>
                 {confirmId === note.id ? (
                   <span className="inline-flex gap-2">
                     <button
                       onClick={() => removeNote(note.id)}
-                      className="rounded-md bg-red-600 px-2 py-1 font-medium text-white hover:bg-red-700"
+                      className="btn bg-pop py-0.5 text-xs"
                     >
                       Confirm
                     </button>
                     <button
                       onClick={() => setConfirmId(null)}
-                      className="rounded-md border border-slate-300 px-2 py-1 hover:bg-slate-100"
+                      className="btn py-0.5 text-xs"
                     >
                       Keep
                     </button>
@@ -116,7 +120,7 @@ export default function Notes({ applicationId }) {
                 ) : (
                   <button
                     onClick={() => setConfirmId(note.id)}
-                    className="text-red-600 hover:underline"
+                    className="font-semibold hover:text-ink hover:underline"
                   >
                     Delete
                   </button>
