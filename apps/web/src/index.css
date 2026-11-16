@@ -39,6 +39,12 @@
     outline: 2px solid var(--color-pop);
     outline-offset: 2px;
   }
+
+  /* Chrome paints autofilled inputs its own colour. Cover it with ours. */
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 100px var(--color-card) inset;
+    -webkit-text-fill-color: var(--color-ink);
+  }
 }
 
 /* Styles we reuse everywhere. Change them here, the whole app follows. */
