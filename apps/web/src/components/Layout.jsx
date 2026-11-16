@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-
+import Logo from "./Logo";
 // NavLink gives us isActive, so the current page can look different.
 const linkClass = ({ isActive }) =>
   `rounded-full border-2 px-4 py-1.5 text-sm font-semibold transition-colors ${
@@ -14,16 +14,7 @@ export default function Layout({ user, onLogout }) {
       <header className="border-b-2 border-ink bg-card">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2.5 font-display text-xl font-extrabold tracking-tight">
-              <span
-                className="relative grid h-8 w-8 place-items-center rounded-lg border-2 border-ink bg-sky text-base shadow-pop-sm"
-                aria-hidden="true"
-              >
-                J
-                <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full border-2 border-ink bg-pop" />
-              </span>
-              JobTrack
-            </span>
+            <Logo />
             <nav className="flex gap-1">
               {/* `end` so "/" is only active on the dashboard itself */}
               <NavLink to="/" end className={linkClass}>

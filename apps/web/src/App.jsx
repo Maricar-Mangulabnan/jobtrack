@@ -6,6 +6,7 @@ import ApplicationPage from "./pages/ApplicationPage";
 import Register from "./pages/Register";
 import Board from "./pages/Board";
 import Layout from "./components/Layout";
+import Logo from "./components/Logo";
 
 function LoginForm({ onLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -31,18 +32,20 @@ function LoginForm({ onLoggedIn }) {
     }
   }
 
-  const inputClass =
-    "mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600";
-
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+      className="card w-full max-w-sm space-y-5 p-6"
     >
-      <h1 className="text-2xl font-bold text-emerald-700">JobTrack</h1>
+      <div className="space-y-1">
+        <Logo />
+        <p className="text-sm text-ink-soft">
+          Keep every application in one place.
+        </p>
+      </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium">
+        <label htmlFor="email" className="block text-sm font-semibold">
           Email
         </label>
         <input
@@ -51,12 +54,12 @@ function LoginForm({ onLoggedIn }) {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={inputClass}
+          className="field mt-1 w-full"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium">
+        <label htmlFor="password" className="block text-sm font-semibold">
           Password
         </label>
         <input
@@ -65,22 +68,29 @@ function LoginForm({ onLoggedIn }) {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className={inputClass}
+          className="field mt-1 w-full"
         />
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+          {error}
+        </p>
+      )}
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-md bg-emerald-700 px-3 py-2 font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+        className="btn btn-primary w-full py-2"
       >
         {loading ? "Logging in..." : "Log in"}
       </button>
-      <p className="text-sm text-slate-600">
+      <p className="text-sm text-ink-soft">
         No account yet?{" "}
-        <Link to="/register" className="text-emerald-700 hover:underline">
+        <Link
+          to="/register"
+          className="font-semibold text-primary hover:underline"
+        >
           Register
         </Link>
       </p>
@@ -108,7 +118,7 @@ export default function App() {
 
   if (checking) {
     return (
-      <main className="grid min-h-screen place-items-center text-slate-500">
+      <main className="grid min-h-screen place-items-center text-ink-soft">
         Loading...
       </main>
     );
@@ -131,7 +141,7 @@ export default function App() {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center bg-slate-50 p-4 text-slate-900">
+    <main className="grid min-h-screen place-items-center p-4">
       <Routes>
         <Route path="/register" element={<Register onLoggedIn={setUser} />} />
         <Route path="*" element={<LoginForm onLoggedIn={setUser} />} />

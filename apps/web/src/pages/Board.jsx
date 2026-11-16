@@ -53,18 +53,20 @@ export default function Board({ onLogout }) {
     setDragging(null);
   }
 
-  if (loading) return <p className="p-6 text-slate-500">Loading...</p>;
+  if (loading) return <p className="p-6 text-ink-soft">Loading...</p>;
 
   return (
-    <main className="mx-auto max-w-[110rem] space-y-4 px-4 py-6">
-      <h1 className="text-2xl font-bold">Board</h1>
+    <main className="mx-auto max-w-[110rem] space-y-6 px-4 py-8">
+      <h1 className="text-3xl font-extrabold">Board</h1>
 
       {error && (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p>
+        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+          {error}
+        </p>
       )}
 
       {rules && (
-        <div className="flex gap-3 overflow-x-auto pb-4">
+        <div className="flex gap-4 overflow-x-auto p-1 pb-6">
           {rules.statuses.map((status) => {
             const cards = apps.filter((a) => a.status === status);
             const droppable = canDrop(status);
@@ -79,26 +81,26 @@ export default function Board({ onLogout }) {
                 }}
                 onDragLeave={() => setOverColumn(null)}
                 onDrop={(e) => handleDrop(e, status)}
-                className={`w-64 shrink-0 rounded-lg p-2 ring-1 transition ${
+                className={`w-64 shrink-0 rounded-2xl border-2 p-3 transition ${
                   overColumn === status
-                    ? "bg-emerald-100 ring-emerald-500"
+                    ? "border-ink bg-mist"
                     : droppable
-                      ? "bg-emerald-50 ring-emerald-300"
+                      ? "border-dashed border-ink bg-mist/40"
                       : dragging
-                        ? "bg-slate-100 opacity-50 ring-slate-200"
-                        : "bg-slate-100 ring-slate-200"
+                        ? "border-line bg-card/40 opacity-50"
+                        : "border-line bg-card/60"
                 }`}
               >
-                <h2 className="mb-2 flex items-center justify-between px-1 text-sm font-semibold">
-                  {status}
-                  <span className="text-xs font-normal text-slate-500">
+                <h2 className="mb-3 flex items-center justify-between">
+                  <StatusBadge status={status} />
+                  <span className="rounded-full border-2 border-ink bg-card px-2 text-xs font-bold">
                     {cards.length}
                   </span>
                 </h2>
 
-                <div className="min-h-16 space-y-2">
+                <div className="min-h-16 space-y-3">
                   {cards.length === 0 && (
-                    <p className="px-1 py-3 text-xs text-slate-400">
+                    <p className="px-1 py-3 text-xs text-ink-soft">
                       No applications
                     </p>
                   )}
@@ -114,20 +116,17 @@ export default function Board({ onLogout }) {
                         setDragging(null);
                         setOverColumn(null);
                       }}
-                      className={`cursor-grab rounded-md bg-white p-3 shadow-sm ring-1 ring-slate-200 active:cursor-grabbing ${
+                      className={`card cursor-grab p-3 transition-all hover:-translate-y-0.5 hover:shadow-pop-lg active:cursor-grabbing ${
                         dragging?.id === app.id ? "opacity-40" : ""
                       }`}
                     >
                       <Link
                         to={`/applications/${app.id}`}
-                        className="block text-sm font-medium hover:underline"
+                        className="block font-semibold hover:underline"
                       >
                         {app.company}
                       </Link>
-                      <p className="text-xs text-slate-600">{app.position}</p>
-                      <div className="mt-2">
-                        <StatusBadge status={app.status} />
-                      </div>
+                      <p className="text-xs text-ink-soft">{app.position}</p>
                     </article>
                   ))}
                 </div>
