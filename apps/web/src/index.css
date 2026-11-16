@@ -49,6 +49,9 @@
   .btn-primary {
     @apply bg-primary text-white;
   }
+  .field {
+    @apply rounded-xl border-2 border-ink bg-card px-3 py-2 text-sm font-medium text-ink placeholder:font-normal placeholder:text-ink-soft focus:shadow-pop;
+  }
   .card {
     @apply rounded-2xl border-2 border-ink bg-card shadow-pop;
   }
