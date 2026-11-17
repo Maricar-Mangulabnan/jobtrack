@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
+import { TrashIcon } from "./icons";
 
 const KINDS = [
   ["follow_up", "Follow up"],
@@ -210,9 +211,11 @@ export default function Reminders({ applicationId }) {
                 ) : (
                   <button
                     onClick={() => setConfirmId(r.id)}
-                    className="text-xs font-semibold text-ink-soft hover:text-ink hover:underline"
+                    aria-label={`Delete reminder ${r.title}`}
+                    title="Delete"
+                    className="rounded-md p-1.5 text-ink-soft hover:bg-red-50 hover:text-red-600"
                   >
-                    Delete
+                    <TrashIcon />
                   </button>
                 )}
               </li>

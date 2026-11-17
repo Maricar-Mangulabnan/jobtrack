@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
+import { TrashIcon } from "./icons";
 
 const when = (value) =>
   new Date(value).toLocaleString("en-PH", {
@@ -120,9 +121,11 @@ export default function Notes({ applicationId }) {
                 ) : (
                   <button
                     onClick={() => setConfirmId(note.id)}
-                    className="font-semibold hover:text-ink hover:underline"
+                    aria-label="Delete note"
+                    title="Delete"
+                    className="rounded-md p-1.5 text-ink-soft hover:bg-red-50 hover:text-red-600"
                   >
-                    Delete
+                    <TrashIcon />
                   </button>
                 )}
               </div>

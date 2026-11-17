@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api";
 import StatusBadge from "./StatusBadge";
+import { TrashIcon } from "./icons";
 
 const dateOnly = (value) =>
   new Date(value).toLocaleDateString("en-PH", { dateStyle: "medium" });
@@ -153,9 +154,11 @@ export default function ApplicationsTable({
                     ) : (
                       <button
                         onClick={() => setConfirmId(app.id)}
-                        className="text-xs font-semibold text-ink-soft hover:text-ink hover:underline"
+                        aria-label={`Delete ${app.company}`}
+                        title="Delete"
+                        className="rounded-md p-1.5 text-ink-soft hover:bg-red-50 hover:text-red-600"
                       >
-                        Delete
+                        <TrashIcon />
                       </button>
                     )}
                   </td>
