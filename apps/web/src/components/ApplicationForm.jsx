@@ -35,6 +35,7 @@ function toBody(form, editing) {
 export default function ApplicationForm({
   initial,
   editing = false,
+  plain = false,
   submitLabel,
   onSubmit,
   onCancel,
@@ -61,7 +62,7 @@ export default function ApplicationForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="card grid gap-4 p-4 sm:grid-cols-2"
+      className={`grid gap-4 sm:grid-cols-2 ${plain ? "" : "card p-4"}`}
     >
       <div>
         <label htmlFor="company" className="block text-sm font-medium">
@@ -70,6 +71,7 @@ export default function ApplicationForm({
         <input
           id="company"
           required
+          autoFocus={!editing}
           value={form.company}
           onChange={set("company")}
           className={fieldClass}

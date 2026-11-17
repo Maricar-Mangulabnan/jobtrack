@@ -4,6 +4,8 @@ import StatusBadge from "../components/StatusBadge";
 import AddApplicationForm from "../components/AddApplicationForm";
 import ApplicationsTable from "../components/ApplicationsTable";
 import Filters from "../components/Filters";
+import Modal from "../components/Modal";
+
 const dateTime = (value) =>
   new Date(value).toLocaleString("en-PH", {
     dateStyle: "medium",
@@ -160,20 +162,23 @@ export default function Home({ onLogout }) {
               Applications
             </h2>
             <button
-              onClick={() => setShowForm((open) => !open)}
+              onClick={() => setShowForm(true)}
               className="btn btn-primary"
             >
-              {showForm ? "Cancel" : "Add application"}
+              Add application
             </button>
           </div>
 
           {showForm && (
-            <AddApplicationForm
-              onCreated={() => {
-                setShowForm(false);
-                load();
-              }}
-            />
+            <Modal title="Add application" onClose={() => setShowForm(false)}>
+              <AddApplicationForm
+                onCreated={() => {
+                  setShowForm(false);
+                  load();
+                }}
+                onCancel={() => setShowForm(false)}
+              />
+            </Modal>
           )}
 
           <Filters
