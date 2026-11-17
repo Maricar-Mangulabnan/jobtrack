@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api";
 import StatusBadge from "../components/StatusBadge";
 import ApplicationForm from "../components/ApplicationForm";
@@ -34,9 +34,13 @@ const toFormValues = (app) => ({
 
 export default function ApplicationPage({ onLogout }) {
   const { id } = useParams(); // the :id from the URL
+  const navigate = useNavigate();
+  const location = useLocation(); // to remember where the user came from, so we can go back there after editing
   const [application, setApplication] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const goBack = () =>
+    location.key === "default" ? navigate("/") : navigate(-1);
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
@@ -71,12 +75,13 @@ export default function ApplicationPage({ onLogout }) {
 
   return (
     <main className="mx-auto max-w-4xl space-y-10 px-4 py-8">
-      <Link
-        to="/"
+      <button
+        type="button"
+        onClick={goBack}
         className="text-sm font-semibold text-primary hover:underline"
       >
-        ← Back to dashboard
-      </Link>
+        ← Back
+      </button>
 
       {loading && <p className="text-ink-soft">Loading...</p>}
       {error && (
