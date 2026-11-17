@@ -66,7 +66,8 @@ export default function Board({ onLogout }) {
       )}
 
       {rules && (
-        <div className="flex gap-4 overflow-x-auto p-1 pb-6">
+        // Small screens: scroll sideways. lg and up: seven equal columns that always fit.
+        <div className="flex gap-3 overflow-x-auto p-1 pb-4 lg:grid lg:grid-cols-7 lg:overflow-visible">
           {rules.statuses.map((status) => {
             const cards = apps.filter((a) => a.status === status);
             const droppable = canDrop(status);
@@ -81,9 +82,9 @@ export default function Board({ onLogout }) {
                 }}
                 onDragLeave={() => setOverColumn(null)}
                 onDrop={(e) => handleDrop(e, status)}
-                className={`w-64 shrink-0 rounded-2xl border p-3 transition ${
+                className={`w-56 shrink-0 rounded-2xl border p-2 transition lg:w-auto lg:min-w-0 ${
                   overColumn === status
-                    ? "border-line bg-mist"
+                    ? "border-primary bg-mist"
                     : droppable
                       ? "border-dashed border-primary bg-mist/60"
                       : dragging
@@ -91,14 +92,14 @@ export default function Board({ onLogout }) {
                         : "border-line bg-card/60"
                 }`}
               >
-                <h2 className="mb-3 flex items-center justify-between">
+                <h2 className="mb-2 flex items-center justify-between gap-1 px-1">
                   <StatusBadge status={status} />
                   <span className="rounded-full border border-line bg-card px-2 text-xs font-bold">
                     {cards.length}
                   </span>
                 </h2>
 
-                <div className="min-h-16 space-y-3">
+                <div className="min-h-16 space-y-2">
                   {cards.length === 0 && (
                     <p className="px-1 py-3 text-xs text-ink-soft">
                       No applications
@@ -116,17 +117,23 @@ export default function Board({ onLogout }) {
                         setDragging(null);
                         setOverColumn(null);
                       }}
-                      className={`card cursor-grab p-3 transition-all  hover:shadow-md active:cursor-grabbing ${
+                      className={`card relative cursor-pointer p-3 transition-shadow hover:border-primary hover:shadow-md ${
                         dragging?.id === app.id ? "opacity-40" : ""
                       }`}
                     >
+                      {/* Stretched link: the ::after layer covers the whole card. */}
                       <Link
                         to={`/applications/${app.id}`}
-                        className="block font-semibold hover:underline"
+                        draggable={false}
+                        className="block after:absolute after:inset-0 after:content-['']"
                       >
-                        {app.company}
+                        <span className="block truncate text-sm font-semibold">
+                          {app.company}
+                        </span>
                       </Link>
-                      <p className="text-xs text-ink-soft">{app.position}</p>
+                      <p className="truncate text-xs text-ink-soft">
+                        {app.position}
+                      </p>
                     </article>
                   ))}
                 </div>
