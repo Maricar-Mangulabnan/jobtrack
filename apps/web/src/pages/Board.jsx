@@ -127,11 +127,11 @@ export default function Board({ onLogout }) {
                         draggable={false}
                         className="block after:absolute after:inset-0 after:content-['']"
                       >
-                        <span className="block truncate text-sm font-semibold">
+                        <span className="line-clamp-2 break-words text-sm font-semibold">
                           {app.company}
                         </span>
                       </Link>
-                      <p className="truncate text-xs text-ink-soft">
+                      <p className="line-clamp-2 break-words text-xs text-ink-soft">
                         {app.position}
                       </p>
                     </article>
