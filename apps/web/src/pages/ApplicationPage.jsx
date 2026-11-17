@@ -80,7 +80,7 @@ export default function ApplicationPage({ onLogout }) {
 
       {loading && <p className="text-ink-soft">Loading...</p>}
       {error && (
-        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+        <p className="rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
           {error}
         </p>
       )}
@@ -89,7 +89,7 @@ export default function ApplicationPage({ onLogout }) {
         <>
           <section className="space-y-4">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-extrabold">{application.company}</h1>
+              <h1 className="text-3xl font-semibold">{application.company}</h1>
               <StatusBadge status={application.status} />
               {!editing && (
                 <button

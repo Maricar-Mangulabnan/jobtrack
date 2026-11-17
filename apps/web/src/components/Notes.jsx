@@ -60,7 +60,7 @@ export default function Notes({ applicationId }) {
 
   return (
     <section aria-labelledby="notes" className="space-y-4">
-      <h2 id="notes" className="text-2xl font-extrabold">
+      <h2 id="notes" className="text-2xl font-semibold">
         Notes
       </h2>
 
@@ -88,7 +88,7 @@ export default function Notes({ applicationId }) {
       </form>
 
       {error && (
-        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+        <p className="rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
           {error}
         </p>
       )}
@@ -96,7 +96,7 @@ export default function Notes({ applicationId }) {
       {notes.length === 0 ? (
         <p className="text-sm text-ink-soft">No notes yet.</p>
       ) : (
-        <ul className="card divide-y-2 divide-line overflow-hidden">
+        <ul className="card divide-y divide-line overflow-hidden">
           {notes.map((note) => (
             <li key={note.id} className="space-y-2 px-4 py-3">
               <p className="whitespace-pre-wrap text-sm">{note.body}</p>

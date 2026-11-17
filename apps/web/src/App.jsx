@@ -73,7 +73,7 @@ function LoginForm({ onLoggedIn }) {
       </div>
 
       {error && (
-        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+        <p className="rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
           {error}
         </p>
       )}

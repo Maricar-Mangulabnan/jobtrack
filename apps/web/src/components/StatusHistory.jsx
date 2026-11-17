@@ -20,13 +20,13 @@ export default function StatusHistory({ applicationId }) {
 
   return (
     <section>
-      <h2 className="mb-4 text-2xl font-extrabold">History</h2>
+      <h2 className="mb-4 text-2xl font-semibold">History</h2>
       {error && <p className="text-sm font-semibold">{error}</p>}
 
-      <ol className="ml-2 space-y-4 border-l-2 border-ink pl-6">
+      <ol className="ml-2 space-y-4 border-l border-line pl-6">
         {rows.map((row) => (
           <li key={row.id} className="relative">
-            <span className="absolute -left-[1.95rem] top-1 h-3.5 w-3.5 rounded-full border-2 border-ink bg-sky" />
+            <span className="absolute -left-[1.95rem] top-1 h-3.5 w-3.5 rounded-full border border-line bg-sky" />
             <div className="flex flex-wrap items-center gap-2 text-sm">
               {row.from_status ? (
                 <>

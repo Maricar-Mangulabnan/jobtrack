@@ -76,7 +76,7 @@ export default function Home({ onLogout }) {
   return (
     <main className="mx-auto max-w-6xl space-y-10 px-4 py-8">
       {error && (
-        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+        <p className="rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
           {error}
         </p>
       )}
@@ -86,10 +86,10 @@ export default function Home({ onLogout }) {
         <>
           <section aria-labelledby="overview">
             <div className="mb-4 flex items-center justify-between">
-              <h2 id="overview" className="text-2xl font-extrabold">
+              <h2 id="overview" className="text-2xl font-semibold">
                 Overview
               </h2>
-              <p className="rounded-full border-2 border-ink bg-mist px-3 py-0.5 text-sm font-semibold">
+              <p className="rounded-full border border-line bg-mist px-3 py-0.5 text-sm font-semibold">
                 {summary.total}{" "}
                 {summary.total === 1 ? "application" : "applications"}
               </p>
@@ -100,11 +100,13 @@ export default function Home({ onLogout }) {
                   key={status}
                   onClick={() => toggleStatus(status)}
                   aria-pressed={filters.status === status}
-                  className={`card p-3 text-left transition-all hover:-translate-y-0.5 hover:shadow-pop-lg ${
-                    filters.status === status ? "bg-mist" : ""
+                  className={`card p-3 text-left transition-all  hover:shadow-md ${
+                    filters.status === status
+                      ? "border-primary bg-mist ring-1 ring-primary"
+                      : ""
                   }`}
                 >
-                  <span className="block font-display text-4xl font-extrabold tabular-nums">
+                  <span className="block font-display text-4xl font-semibold tabular-nums">
                     {count}
                   </span>
                   <span className="mt-2 block">
@@ -116,11 +118,11 @@ export default function Home({ onLogout }) {
           </section>
 
           <section aria-labelledby="upcoming">
-            <h2 id="upcoming" className="mb-4 text-2xl font-extrabold">
+            <h2 id="upcoming" className="mb-4 text-2xl font-semibold">
               Upcoming
             </h2>
             {summary.overdue_count > 0 && (
-              <p className="mb-4 rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+              <p className="mb-4 rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
                 {summary.overdue_count} overdue reminder
                 {summary.overdue_count > 1 ? "s" : ""}
               </p>
@@ -128,7 +130,7 @@ export default function Home({ onLogout }) {
             {summary.upcoming.length === 0 ? (
               <p className="text-sm text-ink-soft">Nothing coming up.</p>
             ) : (
-              <ul className="card divide-y-2 divide-line overflow-hidden">
+              <ul className="card divide-y divide-line overflow-hidden">
                 {summary.upcoming.map((r) => (
                   <li
                     key={r.id}
@@ -154,7 +156,7 @@ export default function Home({ onLogout }) {
       {!loading && (
         <section aria-labelledby="applications">
           <div className="mb-4 flex items-center justify-between">
-            <h2 id="applications" className="text-2xl font-extrabold">
+            <h2 id="applications" className="text-2xl font-semibold">
               Applications
             </h2>
             <button

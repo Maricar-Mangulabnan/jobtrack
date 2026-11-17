@@ -58,14 +58,14 @@ export default function ApplicationsTable({
   return (
     <div className="space-y-3">
       {error && (
-        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+        <p className="rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
           {error}
         </p>
       )}
 
       <div className="card overflow-x-auto">
         <table className="w-full text-left text-sm">
-          <thead className="border-b-2 border-ink bg-mist/50 text-xs font-bold uppercase tracking-wide">
+          <thead className=" border-b border-line bg-mist/50 text-xs font-bold uppercase tracking-wide">
             <tr>
               <th scope="col" className="px-4 py-3">
                 Company
@@ -87,7 +87,7 @@ export default function ApplicationsTable({
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y-2 divide-line">
+          <tbody className="divide-y divide-line">
             {applications.map((app) => {
               const moves = transitions[app.status] || [];
               return (

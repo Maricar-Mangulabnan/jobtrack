@@ -86,7 +86,7 @@ export default function Reminders({ applicationId }) {
 
   return (
     <section aria-labelledby="reminders" className="space-y-4">
-      <h2 id="reminders" className="text-2xl font-extrabold">
+      <h2 id="reminders" className="text-2xl font-semibold">
         Reminders
       </h2>
 
@@ -151,7 +151,7 @@ export default function Reminders({ applicationId }) {
       </form>
 
       {error && (
-        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+        <p className="rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
           {error}
         </p>
       )}
@@ -159,7 +159,7 @@ export default function Reminders({ applicationId }) {
       {reminders.length === 0 ? (
         <p className="text-sm text-ink-soft">No reminders yet.</p>
       ) : (
-        <ul className="card divide-y-2 divide-line overflow-hidden">
+        <ul className="card divide-y divide-line overflow-hidden">
           {reminders.map((r) => {
             const overdue = !r.done && new Date(r.due_at) < new Date();
             return (
@@ -185,7 +185,7 @@ export default function Reminders({ applicationId }) {
                   <p className="text-sm text-ink-soft">
                     {KIND_LABEL[r.kind]} · {when(r.due_at)}
                     {overdue && (
-                      <span className="ml-2 rounded-full border-2 border-ink bg-pop px-2 py-0.5 text-xs font-bold text-ink">
+                      <span className="ml-2 rounded-full border border-line bg-pop px-2 py-0.5 text-xs font-bold text-ink">
                         Overdue
                       </span>
                     )}

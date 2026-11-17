@@ -1,45 +1,36 @@
 @import "tailwindcss";
 
-/* Every colour, font and shadow of the app lives here. Tailwind turns each
-   --color-xxx into bg-xxx, text-xxx, border-xxx and so on. */
+/* Every colour and font of the app lives here. */
 @theme {
-  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --color-paper: #eef8fb; /* page background */
+  --color-paper: #f5f7fa; /* page background */
   --color-card: #ffffff; /* panels, inputs */
-  --color-ink: #1b365d; /* text, borders, shadows */
-  --color-ink-soft: #4f6482; /* secondary text */
-  --color-line: #cfe3ee; /* quiet dividers */
+  --color-ink: #1b365d; /* text */
+  --color-ink-soft: #5b6b82; /* secondary text */
+  --color-line: #dbe3ec; /* card borders and dividers */
+  --color-edge: #8fa0b5; /* input and button borders: stronger, so they are easy to see */
   --color-primary: #005a9c; /* main buttons and links */
-  --color-sky: #60c1e5; /* highlights */
-  --color-mist: #a0e0ef; /* big soft fills */
-  --color-pop: #ff6b4a; /* logo dot and focus ring only */
-
-  /* Hard shadows: no blur, just an offset copy of the shape. */
-  --shadow-pop-sm: 2px 2px 0 0 #1b365d;
-  --shadow-pop: 3px 3px 0 0 #1b365d;
-  --shadow-pop-lg: 5px 5px 0 0 #1b365d;
+  --color-sky: #60c1e5; /* small accents */
+  --color-mist: #e4f0f9; /* soft fills: active nav, selected card */
+  --color-pop: #fca5a5; /* warnings and overdue */
 }
 
 @layer base {
   body {
     background-color: var(--color-paper);
-    background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
-    background-size: 20px 20px;
     color: var(--color-ink);
   }
   h1,
   h2,
   h3 {
-    font-family: var(--font-display);
     letter-spacing: -0.01em;
   }
   :focus-visible {
-    outline: 2px solid var(--color-pop);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
-
   /* Chrome paints autofilled inputs its own colour. Cover it with ours. */
   input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 100px var(--color-card) inset;
@@ -50,15 +41,15 @@
 /* Styles we reuse everywhere. Change them here, the whole app follows. */
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink bg-card px-4 py-1.5 text-sm font-semibold text-ink shadow-pop transition-all hover:-translate-y-0.5 hover:shadow-pop-lg active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:pointer-events-none disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-edge bg-card px-4 py-1.5 text-sm font-semibold text-ink transition-colors hover:bg-paper disabled:pointer-events-none disabled:opacity-60;
   }
   .btn-primary {
-    @apply bg-primary text-white;
-  }
-  .field {
-    @apply rounded-xl border-2 border-ink bg-card px-3 py-2 text-sm font-medium text-ink placeholder:font-normal placeholder:text-ink-soft focus:shadow-pop;
+    @apply border-primary bg-primary text-white hover:bg-ink;
   }
   .card {
-    @apply rounded-2xl border-2 border-ink bg-card shadow-pop;
+    @apply rounded-xl border border-line bg-card shadow-sm;
+  }
+  .field {
+    @apply rounded-lg border border-edge bg-card px-3 py-2 text-sm text-ink placeholder:text-ink-soft focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25;
   }
 }

@@ -56,11 +56,11 @@ export default function Board({ onLogout }) {
   if (loading) return <p className="p-6 text-ink-soft">Loading...</p>;
 
   return (
-    <main className="mx-auto max-w-[110rem] space-y-6 px-4 py-8">
-      <h1 className="text-3xl font-extrabold">Board</h1>
+    <main className="mx-auto max-w-6xl space-y-6 px-4 py-8">
+      <h1 className="text-3xl font-semibold">Board</h1>
 
       {error && (
-        <p className="rounded-xl border-2 border-pop bg-pop/10 p-3 text-sm font-semibold">
+        <p className="rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
           {error}
         </p>
       )}
@@ -81,11 +81,11 @@ export default function Board({ onLogout }) {
                 }}
                 onDragLeave={() => setOverColumn(null)}
                 onDrop={(e) => handleDrop(e, status)}
-                className={`w-64 shrink-0 rounded-2xl border-2 p-3 transition ${
+                className={`w-64 shrink-0 rounded-2xl border p-3 transition ${
                   overColumn === status
-                    ? "border-ink bg-mist"
+                    ? "border-line bg-mist"
                     : droppable
-                      ? "border-dashed border-ink bg-mist/40"
+                      ? "border-dashed border-primary bg-mist/60"
                       : dragging
                         ? "border-line bg-card/40 opacity-50"
                         : "border-line bg-card/60"
@@ -93,7 +93,7 @@ export default function Board({ onLogout }) {
               >
                 <h2 className="mb-3 flex items-center justify-between">
                   <StatusBadge status={status} />
-                  <span className="rounded-full border-2 border-ink bg-card px-2 text-xs font-bold">
+                  <span className="rounded-full border border-line bg-card px-2 text-xs font-bold">
                     {cards.length}
                   </span>
                 </h2>
@@ -116,7 +116,7 @@ export default function Board({ onLogout }) {
                         setDragging(null);
                         setOverColumn(null);
                       }}
-                      className={`card cursor-grab p-3 transition-all hover:-translate-y-0.5 hover:shadow-pop-lg active:cursor-grabbing ${
+                      className={`card cursor-grab p-3 transition-all  hover:shadow-md active:cursor-grabbing ${
                         dragging?.id === app.id ? "opacity-40" : ""
                       }`}
                     >

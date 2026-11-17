@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { api, setToken } from "../api";
-
-const fieldClass =
-  "mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-600";
+import Logo from "../components/Logo";
 
 export default function Register({ onLoggedIn }) {
   const [form, setForm] = useState({
@@ -44,14 +42,15 @@ export default function Register({ onLoggedIn }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+      className="card w-full max-w-sm space-y-5 p-6"
     >
-      <h1 className="text-2xl font-bold text-emerald-700">
-        Create your account
-      </h1>
+      <div className="space-y-1">
+        <Logo />
+        <p className="text-sm text-ink-soft">Create your account.</p>
+      </div>
 
       <div>
-        <label htmlFor="name" className="block text-sm font-medium">
+        <label htmlFor="name" className="block text-sm font-semibold">
           Name
         </label>
         <input
@@ -60,12 +59,12 @@ export default function Register({ onLoggedIn }) {
           autoComplete="name"
           value={form.name}
           onChange={set("name")}
-          className={fieldClass}
+          className="field mt-1 w-full"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium">
+        <label htmlFor="email" className="block text-sm font-semibold">
           Email
         </label>
         <input
@@ -75,29 +74,29 @@ export default function Register({ onLoggedIn }) {
           autoComplete="email"
           value={form.email}
           onChange={set("email")}
-          className={fieldClass}
+          className="field mt-1 w-full"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium">
+        <label htmlFor="password" className="block text-sm font-semibold">
           Password
         </label>
         <input
           id="password"
           type="password"
           required
-          minLength={8}
+          minLength={10}
           autoComplete="new-password"
           value={form.password}
           onChange={set("password")}
-          className={fieldClass}
+          className="field mt-1 w-full"
         />
-        <p className="mt-1 text-xs text-slate-500">At least 10 characters.</p>
+        <p className="mt-1 text-xs text-ink-soft">At least 10 characters.</p>
       </div>
 
       <div>
-        <label htmlFor="confirm" className="block text-sm font-medium">
+        <label htmlFor="confirm" className="block text-sm font-semibold">
           Confirm password
         </label>
         <input
@@ -107,23 +106,27 @@ export default function Register({ onLoggedIn }) {
           autoComplete="new-password"
           value={form.confirm}
           onChange={set("confirm")}
-          className={fieldClass}
+          className="field mt-1 w-full"
         />
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="rounded-xl border border-pop bg-pop/10 p-3 text-sm font-semibold">
+          {error}
+        </p>
+      )}
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-md bg-emerald-700 px-3 py-2 font-medium text-white hover:bg-emerald-800 disabled:opacity-60"
+        className="btn btn-primary w-full py-2"
       >
         {loading ? "Creating account..." : "Create account"}
       </button>
 
-      <p className="text-sm text-slate-600">
+      <p className="text-sm text-ink-soft">
         Already have an account?{" "}
-        <Link to="/" className="text-emerald-700 hover:underline">
+        <Link to="/" className="font-semibold text-primary hover:underline">
           Log in
         </Link>
       </p>
