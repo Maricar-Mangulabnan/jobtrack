@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import Logo from "./Logo";
+import { UserIcon } from "./icons";
 
 // NavLink gives us isActive, so the current page can look different.
 const linkClass = ({ isActive }) =>
@@ -9,7 +10,7 @@ const linkClass = ({ isActive }) =>
       : "text-ink-soft hover:bg-paper hover:text-ink"
   }`;
 
-export default function Layout({ user, onLogout }) {
+export default function Layout({ user }) {
   return (
     <div className="min-h-screen">
       <header className="border-b border-line bg-card">
@@ -27,13 +28,24 @@ export default function Layout({ user, onLogout }) {
             </nav>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <span className="hidden text-sm text-ink-soft sm:inline">
               {user.name}
             </span>
-            <button onClick={onLogout} className="btn">
-              Log out
-            </button>
+            <NavLink
+              to="/settings"
+              aria-label="Settings"
+              title="Settings"
+              className={({ isActive }) =>
+                `rounded-full p-2 transition-colors ${
+                  isActive
+                    ? "bg-mist text-primary"
+                    : "text-ink-soft hover:bg-paper hover:text-ink"
+                }`
+              }
+            >
+              <UserIcon />
+            </NavLink>
           </div>
         </div>
       </header>

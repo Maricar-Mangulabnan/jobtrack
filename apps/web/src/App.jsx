@@ -5,6 +5,7 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import ApplicationPage from "./pages/ApplicationPage";
 import Register from "./pages/Register";
 import Board from "./pages/Board";
+import Settings from "./pages/Settings";
 import Layout from "./components/Layout";
 import Logo from "./components/Logo";
 
@@ -127,13 +128,19 @@ export default function App() {
   if (user) {
     return (
       <Routes>
-        <Route element={<Layout user={user} onLogout={logout} />}>
+        <Route element={<Layout user={user} />}>
           <Route path="/" element={<Home onLogout={logout} />} />
           <Route
             path="/applications/:id"
             element={<ApplicationPage onLogout={logout} />}
           />
           <Route path="/board" element={<Board onLogout={logout} />} />
+          <Route
+            path="/settings"
+            element={
+              <Settings user={user} onUserChange={setUser} onLogout={logout} />
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
