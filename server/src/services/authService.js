@@ -55,4 +55,58 @@ async function getUser(id) {
   return rows[0];
 }
 
-module.exports = { register, login, getUser };
+// Throws 400 when the password is wrong. Used before sensitive changes,
+// so a stolen token alone is not enough to take over the account.
+async function requirePassword(id, password) {
+  const { rows } = await pool.query(
+    "SELECT password_hash FROM users WHERE id = $1",
+    [id],
+  );
+  const row = rows[0];
+  if (!row) throw httpError(404, "User not found");
+  if (!(await bcrypt.compare(password, row.password_hash))) {
+    throw httpError(400, "Current password is incorrect");
+  }
+}
+
+async function updateName(id, name) {
+  const { rows } = await pool.query(
+    `UPDATE users SET name = $2 WHERE id = $1
+     RETURNING id, email, name, created_at`,
+    [id, name],
+  );
+  return rows[0];
+}
+
+async function changePassword(id, currentPassword, newPassword) {
+  await requirePassword(id, currentPassword);
+  const hash = await bcrypt.hash(newPassword, 10);
+  await pool.query("UPDATE users SET password_hash = $2 WHERE id = $1", [
+    id,
+    hash,
+  ]);
+}
+
+async function changeEmail(id, email, password) {
+  await requirePassword(id, password);
+  try {
+    const { rows } = await pool.query(
+      `UPDATE users SET email = $2 WHERE id = $1
+       RETURNING id, email, name, created_at`,
+      [id, email.toLowerCase()],
+    );
+    return rows[0];
+  } catch (err) {
+    if (err.code === "23505") throw httpError(409, "Email already registered");
+    throw err;
+  }
+}
+
+module.exports = {
+  register,
+  login,
+  getUser,
+  updateName,
+  changePassword,
+  changeEmail,
+};
