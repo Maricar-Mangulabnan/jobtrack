@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 
 export default function Modal({
   title,
   onClose,
   closeOnBackdrop = true,
+  width = "max-w-2xl",
   children,
 }) {
+  const titleId = useId(); // for aria-labelledby, so screen readers know what the title is
   // Close on Escape, and stop the page behind from scrolling while the modal is open.
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -32,11 +34,11 @@ export default function Modal({
         <div
           role="dialog"
           aria-modal="true"
-          aria-labelledby="modal-title"
-          className="card w-full max-w-2xl p-6 shadow-xl"
+          aria-labelledby={titleId}
+          className={`card w-full ${width} p-6 shadow-xl`}
         >
           <div className="mb-4 flex items-center justify-between">
-            <h2 id="modal-title" className="text-xl font-semibold">
+            <h2 id={titleId} className="text-xl font-semibold">
               {title}
             </h2>
             <button

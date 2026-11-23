@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../api";
 import ChangeEmailForm from "../components/ChangeEmailForm";
 import ChangePasswordForm from "../components/ChangePasswordForm";
 import Modal from "../components/Modal";
 
-function NameForm({ user, onUserChange, onSaved, onCancel }) {
+function NameForm({ user, onUserChange, onSaved, onCancel, onDirtyChange }) {
   const [name, setName] = useState(user.name);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
   // The server trims the name, so compare the trimmed value.
   const unchanged = name.trim() === user.name;
-
+  useEffect(() => {
+    onDirtyChange(!unchanged);
+  }, [unchanged, onDirtyChange]);
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
@@ -89,16 +91,27 @@ function Row({ title, value, flash, onEdit }) {
 export default function Settings({ user, onUserChange, onLogout }) {
   const [editing, setEditing] = useState(null); // "name" | "email" | "password" | null
   const [flash, setFlash] = useState(null); // which row just saved
+  const [dirty, setDirty] = useState(false); // the open form has unsaved input
+  const [confirming, setConfirming] = useState(false); // "Discard changes?" is showing
 
   const open = (id) => {
     setFlash(null);
+    setDirty(false);
     setEditing(id);
   };
-  const close = () => setEditing(null);
-  const saved = (id) => {
+  const close = () => {
     setEditing(null);
+    setDirty(false);
+    setConfirming(false);
+  };
+  const saved = (id) => {
+    close();
     setFlash(id);
   };
+  // Esc, the X and Cancel all come here. Ask first if something was typed.
+  const tryClose = () => (dirty ? setConfirming(true) : close());
+  // While the question is showing, Esc belongs to the question, not to this modal.
+  const onModalClose = confirming ? () => {} : tryClose;
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-6">
@@ -141,33 +154,74 @@ export default function Settings({ user, onUserChange, onLogout }) {
       </section>
 
       {editing === "name" && (
-        <Modal title="Change name" onClose={close} closeOnBackdrop={false}>
+        <Modal
+          title="Change name"
+          onClose={onModalClose}
+          closeOnBackdrop={false}
+        >
           <NameForm
             user={user}
             onUserChange={onUserChange}
             onSaved={() => saved("name")}
-            onCancel={close}
+            onCancel={tryClose}
+            onDirtyChange={setDirty}
           />
         </Modal>
       )}
 
       {editing === "email" && (
-        <Modal title="Change email" onClose={close} closeOnBackdrop={false}>
+        <Modal
+          title="Change email"
+          onClose={onModalClose}
+          closeOnBackdrop={false}
+        >
           <ChangeEmailForm
             user={user}
             onUserChange={onUserChange}
             onSaved={() => saved("email")}
-            onCancel={close}
+            onCancel={tryClose}
+            onDirtyChange={setDirty}
           />
         </Modal>
       )}
 
       {editing === "password" && (
-        <Modal title="Change password" onClose={close} closeOnBackdrop={false}>
+        <Modal
+          title="Change password"
+          onClose={onModalClose}
+          closeOnBackdrop={false}
+        >
           <ChangePasswordForm
             onSaved={() => saved("password")}
-            onCancel={close}
+            onCancel={tryClose}
+            onDirtyChange={setDirty}
           />
+        </Modal>
+      )}
+
+      {confirming && (
+        <Modal
+          title="Discard changes?"
+          onClose={() => setConfirming(false)}
+          closeOnBackdrop={false}
+          width="max-w-sm"
+        >
+          <p className="text-sm text-ink-soft">
+            What you typed won't be saved.
+          </p>
+          <div className="mt-5 flex justify-end gap-2">
+            <button
+              type="button"
+              autoFocus
+              onClick={() => setConfirming(false)}
+              className="btn"
+            >
+              Keep editing
+            </button>
+            <button type="button" onClick={close} className="btn bg-pop">
+              Discard
+            </button>
+          </div>
         </Modal>
       )}
     </main>

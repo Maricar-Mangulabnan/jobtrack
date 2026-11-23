@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../api";
 
 export default function ChangeEmailForm({
@@ -14,6 +14,12 @@ export default function ChangeEmailForm({
 
   // The server lowercases emails, so compare the same way.
   const unchanged = email.trim().toLowerCase() === user.email;
+
+  // Dirty if the email changed or a password was already typed.
+  const dirty = !unchanged || password !== "";
+  useEffect(() => {
+    onDirtyChange(dirty);
+  }, [dirty, onDirtyChange]);
 
   async function handleSubmit(e) {
     e.preventDefault();

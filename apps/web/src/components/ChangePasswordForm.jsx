@@ -1,14 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../api";
 
 const PASSWORD_MIN = 10;
 
-export default function ChangePasswordForm({ onSaved, onCancel }) {
+export default function ChangePasswordForm({
+  onSaved,
+  onCancel,
+  onDirtyChange,
+}) {
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [confirm, setConfirm] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  const dirty = current !== "" || next !== "" || confirm !== "";
+  useEffect(() => {
+    onDirtyChange(dirty);
+  }, [dirty, onDirtyChange]);
 
   async function handleSubmit(e) {
     e.preventDefault();
