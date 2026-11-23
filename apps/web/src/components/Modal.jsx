@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 
-export default function Modal({ title, onClose, children }) {
+export default function Modal({
+  title,
+  onClose,
+  closeOnBackdrop = true,
+  children,
+}) {
   // Close on Escape, and stop the page behind from scrolling while the modal is open.
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -21,7 +26,7 @@ export default function Modal({ title, onClose, children }) {
         className="flex min-h-full items-center justify-center p-4 sm:p-8"
         // mousedown, not click: dragging to select text and releasing outside should not close it.
         onMouseDown={(e) => {
-          if (e.target === e.currentTarget) onClose();
+          if (closeOnBackdrop && e.target === e.currentTarget) onClose();
         }}
       >
         <div
