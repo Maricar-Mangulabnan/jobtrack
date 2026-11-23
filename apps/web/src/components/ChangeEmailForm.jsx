@@ -6,6 +6,7 @@ export default function ChangeEmailForm({
   onUserChange,
   onSaved,
   onCancel,
+  onDirtyChange,
 }) {
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState("");
